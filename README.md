@@ -2,7 +2,7 @@
 
 A configuration guide for SSDUT(Software School of Dalian University of Technology) students to surf the internet freely in their dormitories.
 
-本文链接
+本文链接： [https://github.com/ShenHongFei/ssdut-free-ipv6-network-guide](https://github.com/ShenHongFei/ssdut-free-ipv6-network-guide)
 
 
 
@@ -28,7 +28,7 @@ A configuration guide for SSDUT(Software School of Dalian University of Technolo
     2.  粘贴运行以下内容。
 
     ```powershell
-    # 配置防火墙
+    # 配置防火墙（只需运行一次）
         New-NetFirewallRule -DisplayName "Block IPv6 Router Advertisement" -Protocol ICMPv6 -IcmpType 134 -Action Block
 
     # 配置路由
@@ -45,9 +45,9 @@ A configuration guide for SSDUT(Software School of Dalian University of Technolo
 
     （服务器我已经搭好，目前开放账号供大家使用，请勿使用BT等P2P手段下载美国有版权的电影，可能会导致服务器被封，可以用百度云离线之后在下载，HTTP不受限制。）
 
-    1.  下载 
+    1.  下载 [https://github.com/ShenHongFei/ssdut-free-ipv6-network-guide/raw/master/shadowsocks.zip](https://github.com/ShenHongFei/ssdut-free-ipv6-network-guide/raw/master/shadowsocks.zip)
 
-    2.  启动 `Shadowsocks.exe` , 在托盘中找到小飞机图标，右键→启动系统代理。
+    2.  解压，启动 `Shadowsocks.exe` , 在托盘中找到小飞机图标，右键→启动系统代理。
 
     3.  在托盘中找到小飞机图标，右键→帮助→勾选详细记录日志→显示日志。
 
@@ -55,7 +55,7 @@ A configuration guide for SSDUT(Software School of Dalian University of Technolo
 
     5.  将软件的本地代理设置为：协议 `Socks5` ，地址 `127.0.0.1` ，端口 `1080` 。
 
-        1.  QQ
+        1.  QQ登录框→右上角小箭头→代理设置
 
             ![qq-proxy](img/qq-proxy.png)
 
@@ -69,6 +69,8 @@ A configuration guide for SSDUT(Software School of Dalian University of Technolo
 
 ## 原理
 
+待更新
+
 请在上方Star
 
 ![stars](img/stars.png)
@@ -81,4 +83,10 @@ A configuration guide for SSDUT(Software School of Dalian University of Technolo
 
 网安1504 沈鸿飞
 
-有问题联系 QQ:350986489
+有问题提交Issue，欢迎改进并pull request。
+
+![issues](img/issues.png)
+
+QQ:350986489
+
+2017/10/14 v1.0

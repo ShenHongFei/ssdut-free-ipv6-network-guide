@@ -5,8 +5,8 @@
 
 
 # 路由
-    New-NetRoute -AddressFamily IPv6 -DestinationPrefix "::/0" -InterfaceAlias 以太网 -NextHop "fe80::2a0:a50f:fc7d:bf00" -RouteMetric 0 -Confirm -ErrorAction Ignore
-    New-NetRoute -AddressFamily IPv6 -DestinationPrefix "::/0" -InterfaceAlias 以太网 -NextHop "fe80::2a0:a50f:fc7d:bf01" -RouteMetric 0 -Confirm -ErrorAction Ignore
+    New-NetRoute -AddressFamily IPv6 -DestinationPrefix "::/0" -InterfaceAlias 以太网 -NextHop "fe80::2a0:a50f:fc7d:bf00" -RouteMetric 0 -Confirm:$false
+    New-NetRoute -AddressFamily IPv6 -DestinationPrefix "::/0" -InterfaceAlias 以太网 -NextHop "fe80::2a0:a50f:fc7d:bf01" -RouteMetric 0 -Confirm:$false
     Get-NetRoute -AddressFamily IPv6 -InterfaceAlias 以太网 -DestinationPrefix "::/0"
     Remove-NetRoute -AddressFamily IPv6 -DestinationPrefix "::/0" -Confirm:$false
     
@@ -14,7 +14,7 @@
     Get-NetIPAddress -InterfaceAlias 以太网|fl *
     Get-NetIPAddress -InterfaceAlias 以太网
 
-    Remove-NetIPAddress "2001:da8:a800:af00::49:1711" -Confirm
+    Remove-NetIPAddress -AddressFamily IPv6 -InterfaceAlias 以太网 -Confirm:$false
     New-NetIPAddress -AddressFamily IPv6 -Type Unicast -InterfaceIndex 17 "2001:da8:a800:af00::3b:e08a"
 
     $ethernet_ip_conf=Get-NetIPConfiguration -Detailed -InterfaceAlias 以太网
@@ -25,6 +25,10 @@
     Start-Process ipconfig  -ArgumentList "/release","以太网"  -Wait -WindowStyle Hidden
     Start-Process ipconfig  -ArgumentList "/renew","以太网"    -Wait -WindowStyle Hidden
     Start-Process ipconfig  -ArgumentList "/renew6","以太网"   -Wait -WindowStyle Hidden
+    ipconfig.exe /release 以太网
+    ipconfig.exe /renew 以太网
+    ipconfig.exe /renew6 以太网
+    ipconfig.exe /release6 以太网
 
     Get-Process -Name ipconfig|Select-Object {$_.Kill()}
 
@@ -50,8 +54,8 @@
         # $ping_error[0].CategoryInfo.Category.ToString() -eq "InvalidOperation"
         if($ping_error){
             Write-Host "ping error"
-            New-NetRoute -AddressFamily IPv6 -DestinationPrefix "::/0" -InterfaceAlias 以太网 -NextHop "fe80::2a0:a50f:fc7d:bf00" -RouteMetric 0 -Confirm -ErrorAction Ignore
-            New-NetRoute -AddressFamily IPv6 -DestinationPrefix "::/0" -InterfaceAlias 以太网 -NextHop "fe80::2a0:a50f:fc7d:bf01" -RouteMetric 0 -Confirm -ErrorAction Ignore
+            New-NetRoute -AddressFamily IPv6 -DestinationPrefix "::/0" -InterfaceAlias 以太网 -NextHop "fe80::2a0:a50f:fc7d:bf00" -RouteMetric 0 -Confirm:$false -ErrorAction Ignore
+            New-NetRoute -AddressFamily IPv6 -DestinationPrefix "::/0" -InterfaceAlias 以太网 -NextHop "fe80::2a0:a50f:fc7d:bf01" -RouteMetric 0 -Confirm:$false -ErrorAction Ignore
             Get-NetRoute -AddressFamily IPv6 -InterfaceAlias 以太网 -DestinationPrefix "::/0"
             continue
         }
