@@ -47,7 +47,12 @@
     nslookup.exe /?
     nslookup.exe test-ipv6.comq
 
-# 
+
+function is_dormitory_network_connected(){
+    ((Get-NetAdapter -Name 以太网|% MediaConnectionState) -eq "Connected") -and
+    ((Get-NetRoute -InterfaceAlias 以太网 -AddressFamily IPv4 -DestinationPrefix "0.0.0.0/0"|% NextHop) -eq "192.168.35.1")
+}
+function auto_connector () {
     $time_out_cnt=0
     while($true){
         $ping_result=Get-WmiObject -Query "select * from win32_pingstatus where Address='2607:8700:101:3118::' and Timeout=1000" -ErrorAction SilentlyContinue -ErrorVariable ping_error
@@ -67,25 +72,37 @@
             11010 {
                 $time_out_cnt++
                 if($time_out_cnt -eq 3){
+                    $time_out_cnt=0
                     Write-Host "连接超时"
-                    # 检查以太网是否为寝室IPv6
-                    $default_ipv4_gw=Get-NetRoute -AddressFamily IPv4 -DestinationPrefix "0.0.0.0/0"|% NextHop
-                    if($default_ipv4_gw -ne "192.168.35.1"){
-
+                    if(-not(is_dormitory_network_connected)){
+                        Write-Host "当前不是寝室网络，休眠5分钟"
+                        Start-Sleep -Seconds 60
+                        continue
                     }
                     Start-Process ipconfig -WindowStyle Hidden -ArgumentList "/renew6","以太网"
                     Start-Sleep -Seconds 5
                     Stop-Process -Name ipconfig -ErrorAction SilentlyContinue
-                    $time_out_cnt=0
                 }else{
                     Start-Sleep -Milliseconds 500
                 }
             }
             11003 {
                 Write-Host "目标主机不可达"
+                Start-Sleep -Seconds 5
+            }
+            11050 {
+                Write-Host $ping_result.statuscode
+                if(-not(is_dormitory_network_connected)){
+                    Write-Host "当前不是寝室网络，休眠1分钟"
+                    Start-Sleep -Seconds 60
+                }
             }
             default {
                 Write-Host $ping_result.statuscode
             }
         }
     }
+}
+
+auto_connector
+    
